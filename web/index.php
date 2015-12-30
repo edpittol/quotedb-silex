@@ -8,11 +8,8 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
     return false;
 }
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../app/bootstrap.php';
 
-$app = new Silex\Application();
-
-$app['debug'] = true;
 $app['knp_menu.template'] = 'menu.twig';
 
 // Register Providers
@@ -21,7 +18,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(__DIR__ . '/../views')
 ));
 $app->register(new Knp\Menu\Integration\Silex\KnpMenuServiceProvider());
-$app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/../config/config.yml'));
 
 // Create menu
 $app['main_menu'] = function($app) {

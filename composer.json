@@ -11,6 +11,12 @@
         "silex/silex" : "~1.2",
         "twig/twig": "^1.23",
         "knplabs/knp-menu": "^2.1",
-        "deralex/yaml-config-service-provider": "^1.0"
+        "deralex/yaml-config-service-provider": "^1.0",
+        "doctrine/orm": "~2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "QuoteDB\\": "src/QuoteDB"
+        }
     }
 }
