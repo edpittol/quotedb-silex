@@ -21,6 +21,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(__DIR__ . '/../views')
 ));
 $app->register(new Knp\Menu\Integration\Silex\KnpMenuServiceProvider());
+$app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/../config/config.yml'));
 
 // Create menu
 $app['main_menu'] = function($app) {

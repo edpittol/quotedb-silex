@@ -1,0 +1,7 @@
+# Database Configuration
+db:
+  dbname: quote_db_silex
+  user: root
+  password: 
+  host: localhost
+  driver: pdo_mysql
