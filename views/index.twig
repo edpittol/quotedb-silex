@@ -1,0 +1,33 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+<h3>Add Quote</h3>
+                
+<form action="">
+    <div class="form-group">
+        <textarea class="form-control" rows="3" placeholder="Quote"></textarea>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Author">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Send</button>
+    </div>
+</form>
+
+<h1>Quotes</h1>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam minus explicabo ratione dolor, debitis molestias laborum sequi ipsa laboriosam, deserunt a, aut distinctio tenetur atque nemo modi temporibus! Harum, obcaecati.</p>
+
+<div class="row">
+    <div class="col-xs-2"><strong>Author</strong></div>
+    <div class="col-xs-10">Samuel Jackson</div>
+</div>
+
+<div class="row">
+    <div class="col-xs-2"><strong>Inserted by</strong></div>
+    <div class="col-xs-10">Eduardo Pittol</div>
+</div>
+
+<hr>
+{% endblock %}

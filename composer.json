@@ -8,6 +8,8 @@
         }
     ],
     "require" : {
-        "silex/silex" : "~1.2"
+        "silex/silex" : "~1.2",
+        "twig/twig": "^1.23",
+        "knplabs/knp-menu": "^2.1"
     }
 }

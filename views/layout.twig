@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quote DB</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <a class="navbar-brand" href="/">Quote DB</a>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                {{ knp_menu_render('main', { 'currentClass': 'active' }) }}
+            </div>
+        </nav>
+
+        <div class="alert alert-success">Quote inserted with success</div>
+        <div class="alert alert-danger">Error on insert quote</div>
+        <div class="alert alert-success">Hello, %name%.</div>
+        <div class="alert alert-success">Bye bye, %name%.</div>
+        
+        <div class="row">
+            <div class="col-xs-8">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-xs-push-1 col-xs-3">
+                <p><a href="#" class="btn btn-info center-block">Sign Up</a></p>
+
+                <h3>Log In</h3>
+
+                <p><a href="#" class="btn btn-primary center-block">Facebook</a></p>
+                <p><a href="#" class="btn btn-danger center-block">Google Plus</a></p>
+
+                <p class="text-center">or</p>
+
+                <form action="">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="E-mail">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Log In</button>
+                    </div>
+                </form>
+
+                <p>Hello, %name% (%email) did you insert <strong>%n%</strong> quotes. Thank you for collab.</p>
+                
+                <a href="#" class="btn btn-default center-block">Log out</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
