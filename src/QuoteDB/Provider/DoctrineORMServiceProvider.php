@@ -60,7 +60,7 @@ class DoctrineORMServiceProvider implements ServiceProviderInterface {
         $entityManagerConfig->setMetadataDriverImpl($driverImpl);
         
         // Set an alias for the entities
-        $entityManagerConfig->addEntityNamespace('QuoteDB', 'QuoteDB\\Entities');
+        $entityManagerConfig->addEntityNamespace('QuoteDB', 'QuoteDB\\Entity');
                 
         return EntityManager::create($connection, $entityManagerConfig);
     }
