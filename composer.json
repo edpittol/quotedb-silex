@@ -1,0 +1,13 @@
+{
+    "name" : "edpittol/quote-db-silex",
+    "description" : "Quote DB Silex",
+    "license" : "GPLv3+",
+    "authors" : [{
+            "name" : "Edaurdo Pittol",
+            "email" : "edpittol@gmail.com"
+        }
+    ],
+    "require" : {
+        "silex/silex" : "~1.2"
+    }
+}
