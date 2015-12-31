@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\DBALException;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -19,6 +17,8 @@ class DoctrineORMServiceProvider implements ServiceProviderInterface {
     public function register(Application $app)
     {
         $app['orm.em'] = $this->createEntityManager($app);
+        
+        
     }
 
     public function boot(Application $app)
@@ -51,10 +51,9 @@ class DoctrineORMServiceProvider implements ServiceProviderInterface {
         
         $entityManagerConfig = Setup::createConfiguration(true);
         
-        $reflectionClass = new \ReflectionClass($entityManagerConfig);
-        $doctrineDir = dirname($reflectionClass->getFileName()) . "/../";
-        
-        AnnotationRegistry::registerFile($doctrineDir . "/ORM/Mapping/Driver/DoctrineAnnotations.php");
+        AnnotationRegistry::registerFile(__DIR__ . "/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
+        AnnotationRegistry::registerFile(__DIR__ . "/../Annotation/Driver/SymfonyValidator.php");
+        AnnotationRegistry::registerFile(__DIR__ . "/../Annotation/Driver/SymfonyDoctrineBridgeValidator.php");
         $reader = new AnnotationReader();
         $driverImpl = new AnnotationDriver($reader, __DIR__ . '/../Entity');
         $entityManagerConfig->setMetadataDriverImpl($driverImpl);

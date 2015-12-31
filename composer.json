@@ -1,22 +1,32 @@
 {
-    "name" : "edpittol/quote-db-silex",
-    "description" : "Quote DB Silex",
-    "license" : "GPLv3+",
-    "authors" : [{
-            "name" : "Eduardo Pittol",
-            "email" : "edpittol@gmail.com"
-        }
-    ],
-    "require" : {
-        "silex/silex" : "~1.2",
-        "twig/twig": "^1.23",
-        "knplabs/knp-menu": "^2.1",
-        "deralex/yaml-config-service-provider": "^1.0",
-        "doctrine/orm": "~2.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "QuoteDB\\": "src/QuoteDB"
-        }
-    }
+	"name" : "edpittol/quote-db-silex",
+	"description" : "Quote DB Silex",
+	"license" : "GPLv3+",
+	"authors" : [{
+			"name" : "Eduardo Pittol",
+			"email" : "edpittol@gmail.com"
+		}
+	],
+	"require" : {
+		"silex/silex" : "~1.2",
+		"twig/twig" : "^1.23",
+		"knplabs/knp-menu" : "^2.1",
+		"deralex/yaml-config-service-provider" : "^1.0",
+		"doctrine/orm" : "~2.2",
+		"symfony/security" : "^3.0",
+		"symfony/twig-bridge" : "^3.0",
+		"symfony/form" : "^3.0",
+		"symfony/validator" : "^3.0",
+		"symfony/config" : "^3.0",
+		"symfony/translation" : "^3.0",
+		"symfony/security-csrf" : "^3.0",
+		"symfony/doctrine-bridge" : "^3.0",
+		"symfony/finder" : "^3.0",
+		"symfony/yaml" : "~2.4"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"QuoteDB\\" : "src/QuoteDB"
+		}
+	}
 }
