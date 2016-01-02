@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Quote
  *
- * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Table
+ * @ORM\Entity(repositoryClass="QuoteDB\Repository\QuoteRepository")
  */
  
 class Quote
@@ -47,7 +47,7 @@ class Quote
      *
      * @ORM\Column(type="boolean", options={"default":false})
      */
-    private $approved;
+    private $approved = false;
 
     public function getId()
     {

@@ -1,8 +1,11 @@
 <?php
 
 use Knp\Menu\Matcher\Voter\UriVoter;
+use QuoteDB\Entity\Author;
+use QuoteDB\Entity\Quote;
 use QuoteDB\Entity\User;
 use QuoteDB\Form\UserType;
+use QuoteDB\Form\QuoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
@@ -102,7 +105,17 @@ $app->before(function (Request $request) use ($app) {
 
 // Homepage controller
 $app->get('/', function () use ($app) {
-	return $app['twig']->render('index.twig');
+    $quote = new Quote();
+    $form = $app['form.factory']->create(QuoteType::class, $quote, array(
+        'action' => $app['url_generator']->generate('quote')
+    ));
+    
+    $quotes = $app['orm.em']->getRepository('QuoteDB:Quote')->homepageQuotes();
+    
+	return $app['twig']->render('index.twig', array(
+        'form' => $form->createView(),
+	    'quotes' => $quotes
+	));
 })
 ->bind('homepage');
 
@@ -145,5 +158,52 @@ $app->match('/register', function (Request $request) use ($app) {
 })
 ->method('GET|POST')
 ->bind('register');
+
+// authors json
+$app->get('/authors', function (Request $request) use ($app) {
+    $query = $request->query->get('query');
+    $authors = $app['orm.em']->getRepository('QuoteDB:Author')->autocompleteQuery($query);
+    
+	return $app->json($authors, 201);
+})
+->bind('authors');
+
+// insert quote controller
+$app->post('/quote', function (Request $request) use ($app) {    
+    $quote = new Quote();
+    $form = $app['form.factory']->create(QuoteType::class, $quote);
+    
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em = $app['orm.em'];
+        
+        // persist user on database
+        $quote->setInsertedBy($app['user']);
+        
+        // find if author already exist
+        $authorName = $quote->getAuthor();
+        $author = $em->getRepository('QuoteDB:Author')->findBy(array(
+            'name' => $authorName
+        ));
+        
+        // if not exist, create
+        if (empty($author)) {
+            $author = new Author();
+            $author->setName($authorName);
+        }
+        
+        $quote->setAuthor($author);
+
+        $em->persist($quote);
+        $em->flush();
+        
+        $app['session']->getFlashBag()->add('success', 'Quote registered with success. Wait for approve.');
+    } else {
+        $app['session']->getFlashBag()->add('error', 'Error on register quote. Try again.');
+    }
+
+    return $app->redirect('/');
+})
+->bind('quote');
 
 $app->run();

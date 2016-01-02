@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Quote
  *
- * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Table
+ * @ORM\Entity(repositoryClass="QuoteDB\Repository\AuthorRepository")
  */
 class Author
 {
