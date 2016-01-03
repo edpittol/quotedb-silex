@@ -56,13 +56,18 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new QuoteDB\Provider\FacebookServiceProvider());
 $app->register(new QuoteDB\Provider\GoogleServiceProvider());
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => $app['config']['log']['logfile'],
+    'monolog.level' => $app['config']['log']['level'],
+    'monolog.name' => 'quotedb',
+));
 
 $app['security.authentication.logout_handler.default'] = $app->share(function ($app) {
-    return new QuoteDB\Handler\LogoutSuccessHandler($app['security.http_utils'], $app['session']);
+    return new QuoteDB\Handler\LogoutSuccessHandler($app['security.http_utils'], $app);
 });
 
 $app['security.authentication.success_handler.default'] = $app->share(function ($app) {
-    return new QuoteDB\Handler\AuthenticationSuccessHandler($app['security.http_utils'], $app['session']);
+    return new QuoteDB\Handler\AuthenticationSuccessHandler($app['security.http_utils'], $app);
 });
 
 // Twig extend
@@ -144,11 +149,12 @@ $app->match('/register', function (Request $request) use ($app) {
         $em = $app['orm.em'];
         $em->persist($user);
         $em->flush();
+        
+        $app['session']->getFlashBag()->add('success', 'Register successful.');
+        $app['monolog']->addInfo(sprintf("User '%s' registered with ID %d and form provider.", $user->getEmail(), $user->getId()));
 
         $app['user'] = $user;
         $app['security.token_storage']->setToken($app['security.set_token']);
-        
-        $app['session']->getFlashBag()->add('success', 'Register successful.');
     
         return $app->redirect('/');
     }
@@ -176,6 +182,7 @@ $app->get('/socialauth/{name}', function (Request $request, $name) use ($app) {
             $em->flush();
         
             $app['session']->getFlashBag()->add('success', 'Register successful.');
+            $app['monolog']->addInfo(sprintf("User '%s' registered with ID %d and %s provider.", $user->getEmail(), $user->getId(), $name));
         }
         
         $app['user'] = $user;
@@ -228,8 +235,10 @@ $app->post('/quote', function (Request $request) use ($app) {
         $em->flush();
         
         $app['session']->getFlashBag()->add('success', 'Quote registered with success. Wait for approve.');
+        $app['monolog']->addInfo(sprintf("Quote %d registered.", $user->getId()));
     } else {
         $app['session']->getFlashBag()->add('error', 'Error on register quote. Try again.');
+        $app['monolog']->addWarning("Error on register quote.");
     }
 
     return $app->redirect('/');

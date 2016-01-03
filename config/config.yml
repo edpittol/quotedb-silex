@@ -14,3 +14,8 @@ social:
   google:
     client_id : 924954951668-nakrviqjofavruf1p1nf99hbmfh20l9n.apps.googleusercontent.com
     client_secret : Tzd21qRK_i7DvUL40InDS_zd 
+
+# Monolog configuration
+log:
+  logfile: /tmp/quotedb.log
+  level: 100
