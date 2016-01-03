@@ -5,3 +5,12 @@ db:
   password: 
   host: localhost
   driver: pdo_mysql
+  
+# Social login configuration
+social:
+  facebook:
+    app_id: 1636091599988142
+    app_secret: 0ef6d626a94c6f6d0cd0103510295b04
+  google:
+    client_id : 924954951668-nakrviqjofavruf1p1nf99hbmfh20l9n.apps.googleusercontent.com
+    client_secret : Tzd21qRK_i7DvUL40InDS_zd 

@@ -8,6 +8,7 @@ use QuoteDB\Form\UserType;
 use QuoteDB\Form\QuoteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 $filename = __DIR__ .preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
 if (php_sapi_name() === 'cli-server' && is_file($filename)) {
@@ -38,8 +39,9 @@ $app['security.firewalls'] = array(
 );
 
 // Register Providers
-$app->register(new Silex\Provider\SecurityServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
+$app->register(new Silex\Provider\SecurityServiceProvider());
+$app->register(new QuoteDB\Provider\SecurityServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
 	'twig.path' => array(__DIR__ .'/../views')
@@ -51,6 +53,9 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'pt_BR',
     'translator.domains' => array(),
 ));
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+$app->register(new QuoteDB\Provider\FacebookServiceProvider());
+$app->register(new QuoteDB\Provider\GoogleServiceProvider());
 
 $app['security.authentication.logout_handler.default'] = $app->share(function ($app) {
     return new QuoteDB\Handler\LogoutSuccessHandler($app['security.http_utils'], $app['session']);
@@ -139,15 +144,11 @@ $app->match('/register', function (Request $request) use ($app) {
         $em = $app['orm.em'];
         $em->persist($user);
         $em->flush();
+
+        $app['user'] = $user;
+        $app['security.token_storage']->setToken($app['security.set_token']);
         
-        // login after registration
-        $app['security.token_storage']->setToken(new \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken(
-            $user, $user->getPassword(),
-            'user_firewall',
-            array('ROLE_USER')
-            ));
-        
-        $app['session']->getFlashBag()->add('success', sprintf('Register successful.'));
+        $app['session']->getFlashBag()->add('success', 'Register successful.');
     
         return $app->redirect('/');
     }
@@ -158,6 +159,35 @@ $app->match('/register', function (Request $request) use ($app) {
 })
 ->method('GET|POST')
 ->bind('register');
+
+// OAuth2 authentication, allowed Facebook and Google
+$app->get('/socialauth/{name}', function (Request $request, $name) use ($app) {
+    try {
+        $oauthUser = $app[$name . '.user'];
+
+        $em = $app['orm.em'];
+        try {
+            $user = $em->getRepository('QuoteDB:User')->loadUserByUsername($oauthUser->getEmail());
+        } catch (UsernameNotFoundException $e) {
+            $user = new User();
+            $user->setName($oauthUser->getName());
+            $user->setEmail($oauthUser->getEmail());
+            $em->persist($user);
+            $em->flush();
+        
+            $app['session']->getFlashBag()->add('success', 'Register successful.');
+        }
+        
+        $app['user'] = $user;
+        $app['security.token_storage']->setToken($app['security.set_token']);
+        
+    } catch (InvalidArgumentException $e) {
+        $app['session']->getFlashBag()->add('error', sprintf('Invalid social auth method.'));
+    }
+    
+    return $app->redirect('/');
+})
+->bind('socialauth');
 
 // authors json
 $app->get('/authors', function (Request $request) use ($app) {
