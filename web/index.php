@@ -16,7 +16,7 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
 }
 
 require_once __DIR__ .'/../app/bootstrap.php';
-    
+
 // Before register providers configuration
 $app['knp_menu.template'] = 'menu.twig';
 $app['security.firewalls'] = array(
@@ -222,6 +222,7 @@ $app->post('/quote', function (Request $request) use ($app) {
         $author = $em->getRepository('QuoteDB:Author')->findBy(array(
             'name' => $authorName
         ));
+        $author = $author[0];
         
         // if not exist, create
         if (empty($author)) {
@@ -235,7 +236,7 @@ $app->post('/quote', function (Request $request) use ($app) {
         $em->flush();
         
         $app['session']->getFlashBag()->add('success', 'Quote registered with success. Wait for approve.');
-        $app['monolog']->addInfo(sprintf("Quote %d registered.", $user->getId()));
+        $app['monolog']->addInfo(sprintf("Quote %d registered.", $quote->getId()));
     } else {
         $app['session']->getFlashBag()->add('error', 'Error on register quote. Try again.');
         $app['monolog']->addWarning("Error on register quote.");
