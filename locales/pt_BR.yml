@@ -1,3 +1,7 @@
+# menu
+Home: Página Inicial
+Contact: Contato
+
 # index
 Add Quote: Adicionar Citação
 Quote: Citação
@@ -6,9 +10,22 @@ Add: Acidionar
 Quotes: Citações
 Inserted by: Inserida por
 
-# register
-Sign Up: Cadastrar
+# contact
 Name: Nome
 Email: E-mail
+Message: Mensagem
+Send: Enviar
+This value should not be blank.: Esse valor não pode estar em branco.
+This value is not a valid email address.: Esse valor não é um endereço de e-mail válido
+
+# auth
+Sign Up: Cadastrar
 Password: Senha
 Repeat Password: Repetir Senha
+Logout: Sair
+"Hello, %s.": Olá, %s.
+"Logged out successfully.": Logout realizado com sucesso.
+"Register successful.": Registro realizado com sucesso.
+"Quote registered with success. Wait for approve.": Citação registrada com sucesso. Aguardando aprovação
+"Error on register quote. Try again.": Erro ao registrar citação. Tente novamente.
+"Hello, %s (%s). Did you insert <strong>n</strong> quotes.": Olá, %s (%s). Você inseriu <strong>n</strong> citações.

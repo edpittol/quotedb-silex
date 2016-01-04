@@ -33,13 +33,15 @@
             </div>
             <div class="col-xs-push-1 col-xs-3">
                 {% if is_granted('ROLE_USER') %}
-                <p>Hello, {{ app.user.getName }} ({{ app.user.getEmail }}) did you insert <strong>%n%</strong> quotes. Thank you for collab.</p>
+                <p>
+                    {{ "Hello, %s (%s). Did you insert <strong>n</strong> quotes."|trans|format(app.user.getName, app.user.getEmail)|raw }}
+                </p>
                 
-                <a href="{{ path('logout') }}" class="btn btn-default center-block">Log out</a>
+                <a href="{{ path('logout') }}" class="btn btn-default center-block">{{ "Logout"|trans }}</a>
                 {% else %}
-                <p><a href="{{ path('register') }}" class="btn btn-info center-block">Sign Up</a></p>
+                <p><a href="{{ path('register') }}" class="btn btn-info center-block">{{ "Sign Up"|trans }}</a></p>
 
-                <h3>Log In</h3>
+                <h3>{{ "Login"|trans }}</h3>
 
                 <p><a href="{{ app['facebook.login_url'] }}" class="btn btn-primary center-block">Facebook</a></p>
                 <p><a href="{{ app['google.login_url'] }}" class="btn btn-danger center-block">Google</a></p>
@@ -48,13 +50,13 @@
 
                 <form action="{{ path('login_check') }}" method="POST">
                     <div class="form-group">
-                        <input ntype="text" name="_username" value="{{ last_username }}" class="form-control" placeholder="E-mail">
+                        <input ntype="text" name="_username" value="{{ last_username }}" class="form-control" placeholder="{{ "Email"|trans }}">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="_password" value="" class="form-control" placeholder="Password">
+                        <input type="password" name="_password" value="" class="form-control" placeholder="{{ "Password"|trans }}">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-default">Log In</button>
+                        <button type="submit" class="btn btn-default">{{ "Login"|trans }}</button>
                     </div>
                 </form>
                 {% endif %}

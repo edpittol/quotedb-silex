@@ -26,7 +26,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
 	    $this->app['monolog']->addInfo(sprintf("User '%s' logged in.", $this->app['user']->getEmail()));
-        $this->app['session']->getFlashBag()->add('success', sprintf('Hello, %s', $token->getUser()->getName()));
+        $this->app['session']->getFlashBag()->add('success', sprintf($this->app['translator']->trans('Hello, %s.'), $token->getUser()->getName()));
         return parent::onAuthenticationSuccess($request, $token);
     }
 }
