@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Email;
 
 class ContactType extends AbstractType
 {
@@ -28,7 +29,8 @@ class ContactType extends AbstractType
                 new NotBlank()
             ),
             'email' => array(
-                new NotBlank()
+                new NotBlank(),
+                new Email()
             ),
             'message' => array(
                 new NotBlank()
