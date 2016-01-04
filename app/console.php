@@ -1,12 +1,23 @@
 <?php
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
+use QuoteDB\Database\EntityManagerFactory;
 
-require_once 'bootstrap.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 $console = new Application();
 
-$em = $app['orm.em'];
+// get project configuration values
+$yaml = new Parser();
+try {
+    $config = $yaml->parse(file_get_contents(__DIR__ . '/../config/config.yml'));
+} catch (ParseException $e) {
+    printf("Unable to parse the YAML string: %s", $e->getMessage());
+}
+
+$em = EntityManagerFactory::create($config['db']);
 
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),

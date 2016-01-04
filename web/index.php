@@ -17,32 +17,39 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
 	return false;
 }
 
-require_once __DIR__ .'/../app/bootstrap.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-// Before register providers configuration
-$app['knp_menu.template'] = 'menu.twig';
-$app['security.firewalls'] = array(
-    'default' => array(
-        'pattern' => '^/',
-        'anonymous' => true,
-        'form' => array(
-            'login_path' => '/',
-            'check_path' => '/login_check',
-            'use_referer' => true
-        ),
-        'logout' => array(
-            'logout_path' => '/logout',
-            'invalidate_session' => false
-        ),
-        'users' => $app->share(function ($app) {
-            return $app['orm.em']->getRepository('QuoteDB:User');
-		}),
-	),
-);
+$app = new Silex\Application();
+
+// active debug if the access is local
+if (in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
+    $app['debug'] = true;
+}
 
 // Register Providers
+$app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/../config/config.yml'));
+$app->register(new QuoteDB\Provider\DoctrineORMServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
-$app->register(new Silex\Provider\SecurityServiceProvider());
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+    'security.firewalls' => array(
+        'default' => array(
+            'pattern' => '^/',
+            'anonymous' => true,
+            'form' => array(
+                'login_path' => '/',
+                'check_path' => '/login_check',
+                'use_referer' => true
+            ),
+            'logout' => array(
+                'logout_path' => '/logout',
+                'invalidate_session' => false
+            ),
+            'users' => $app->share(function ($app) {
+                return $app['orm.em']->getRepository('QuoteDB:User');
+    		}),
+    	),
+    )
+));
 $app->register(new QuoteDB\Provider\SecurityServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
