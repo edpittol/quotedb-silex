@@ -1,0 +1,31 @@
+# Database Configuration
+db:
+  dbname: quote_db_silex
+  user: root
+  password: 
+  host: localhost
+  driver: pdo_mysql
+  
+# Social login configuration
+social:
+  facebook:
+    app_id: 9999999999999999
+    app_secret: abcde12345abcde12345abcde12345ab
+    
+  google:
+    client_id : abcde12345ab-abcde12345abcde12345abcde12345ab.apps.googleusercontent.com
+    client_secret : abcde12345abcde12345abcd
+
+# Monolog configuration
+log:
+  logfile: /tmp/quotedb.log
+  level: 100
+  
+# SMTP configuration
+# Same values of swiftmailer.options - http://silex.sensiolabs.org/doc/providers/swiftmailer.html#parameters
+smtp:
+  host: localhost
+  port: 465
+  username: email@email.com
+  password: p@sswOrd
+  encryption: ssl
