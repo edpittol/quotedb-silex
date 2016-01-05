@@ -1,7 +1,7 @@
 {
 	"name" : "edpittol/quote-db-silex",
 	"description" : "Quote DB Silex",
-	"license" : "GPLv3+",
+	"license" : "GPLv3",
 	"authors" : [{
 			"name" : "Eduardo Pittol",
 			"email" : "edpittol@gmail.com"
@@ -24,9 +24,9 @@
 		"symfony/finder" : "^3.0",
 		"symfony/yaml" : "~2.4",
 		"facebook/php-sdk-v4" : "^5.1",
-		"google/apiclient": "^1.1",
-		"monolog/monolog": "^1.17",
-		"swiftmailer/swiftmailer": "^5.4"
+		"google/apiclient" : "^1.1",
+		"monolog/monolog" : "^1.17",
+		"swiftmailer/swiftmailer" : "^5.4"
 	},
 	"autoload" : {
 		"psr-4" : {
