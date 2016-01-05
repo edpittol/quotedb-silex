@@ -28,7 +28,7 @@ $ cp config/config.example.yml config/config.yml
 ### Create database schema
 
 ```
-php app/console.php orm:schema-tool:create
+$ php app/console.php orm:schema-tool:create
 ```
 
 ## Usage
