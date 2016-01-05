@@ -25,7 +25,7 @@ Copy the config example file and put yours credentials values.
 $ cp config/config.example.yml config/config.yml
 ```
 
-Create database schema
+### Create database schema
 
 ```
 php app/console.php orm:schema-tool:create
