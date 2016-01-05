@@ -28,4 +28,4 @@ Logout: Sair
 "Register successful.": Registro realizado com sucesso.
 "Quote registered with success. Wait for approve.": Citação registrada com sucesso. Aguardando aprovação
 "Error on register quote. Try again.": Erro ao registrar citação. Tente novamente.
-"Hello, %s (%s). Did you insert <strong>n</strong> quotes.": Olá, %s (%s). Você inseriu <strong>n</strong> citações.
+"Hello, %s (%s). Did you insert %d quotes.": Olá, %s (%s). Você inseriu %d citações.

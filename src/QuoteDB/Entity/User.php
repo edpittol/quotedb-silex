@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints as Validator;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Quote
@@ -66,6 +67,18 @@ class User implements UserInterface
      * @ORM\Column(type="boolean", options={"default":true})
      */
     private $enabled = true;
+    
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="Quote", mappedBy="insertedBy")
+     */
+    private $quotes;
+    
+    public function __construct()
+    {
+        $this->features = new ArrayCollection();
+    }
 
     public function getSalt()
     {
@@ -170,6 +183,15 @@ class User implements UserInterface
         $this->enabled = $enabled;
         return $this;
     }
- 
- 
+
+    public function getQuotes()
+    {
+        return $this->quotes;
+    }
+
+    public function setQuotes(array $quotes)
+    {
+        $this->quotes = $quotes;
+        return $this;
+    }
 }

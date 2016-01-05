@@ -85,6 +85,11 @@ $app['security.authentication.success_handler.default'] = $app->share(function (
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     // Add global variables
     $twig->addGlobal('last_username', $app['session']->get('_security.last_username'));
+    
+    // Filter functions
+    $twig->addFilter(new Twig_SimpleFilter('count', function ($array) {
+        return count($array);
+    }));
 
     return $twig;
 }));

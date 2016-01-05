@@ -34,7 +34,7 @@
             <div class="col-xs-push-1 col-xs-3">
                 {% if is_granted('ROLE_USER') %}
                 <p>
-                    {{ "Hello, %s (%s). Did you insert <strong>n</strong> quotes."|trans|format(app.user.getName, app.user.getEmail)|raw }}
+                    {{ "Hello, %s (%s). Did you insert %d quotes."|trans|format(app.user.getName, app.user.getEmail, app.user.getQuotes|count) }}
                 </p>
                 
                 <a href="{{ path('logout') }}" class="btn btn-default center-block">{{ "Logout"|trans }}</a>
