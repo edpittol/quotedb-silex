@@ -21,7 +21,8 @@ class EntityManagerFactory
      *
      * @return \Doctrine\ORM\EntityManager The Entity Manager.
      */
-    public static function create(array $databaseParameters) {
+    public static function create(array $databaseParameters)
+    {
         $dbalConfiguration = new Configuration();
         
         $driveOptions = array();
@@ -36,7 +37,9 @@ class EntityManagerFactory
         
         $entityManagerConfig = Setup::createConfiguration(true);
         
-        AnnotationRegistry::registerFile(__DIR__ . "/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
+        AnnotationRegistry::registerFile(
+            __DIR__ . "/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php"
+        );
         AnnotationRegistry::registerFile(__DIR__ . "/../Annotation/Driver/SymfonyValidator.php");
         AnnotationRegistry::registerFile(__DIR__ . "/../Annotation/Driver/SymfonyDoctrineBridgeValidator.php");
         $reader = new AnnotationReader();

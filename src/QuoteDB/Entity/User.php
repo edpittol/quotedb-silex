@@ -81,15 +81,18 @@ class User implements UserInterface
         return $this->getEmail();
     }
 
-    public function isAccountNonExpired() {
+    public function isAccountNonExpired()
+    {
         return $this->enabled();
     }
 
-    public function isAccountNonLocked() {
+    public function isAccountNonLocked()
+    {
         return $this->enabled();
     }
 
-    public function isCredentialsNonExpired() {
+    public function isCredentialsNonExpired()
+    {
         return $this->enabled();
     }
 

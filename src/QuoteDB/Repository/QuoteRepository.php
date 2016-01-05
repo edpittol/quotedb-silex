@@ -9,7 +9,7 @@ class QuoteRepository extends EntityRepository
     public function homepageQuotes()
     {
         $qb = $this->createQueryBuilder('q');
-        $query = $qb    
+        $query = $qb
             ->where($qb->expr()->like('q.approved', ':approved'))
             ->orderBy('q.id', 'DESC')
             ->setParameter('approved', true)

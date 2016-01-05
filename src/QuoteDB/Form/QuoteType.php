@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class QuoteType extends AbstractType
 {
     /**
-     * 
+     *
      * @var Application
      */
     private $app;

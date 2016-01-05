@@ -11,7 +11,7 @@ class FacebookServiceProvider implements ServiceProviderInterface {
 
     public function register(Application $app)
     {
-        $app['facebook'] = $app->share(function() use ($app) {
+        $app['facebook'] = $app->share(function () use ($app) {
             return new Facebook(array(
                 'app_id' => $app['facebook.config']['app_id'],
                 'app_secret' => $app['facebook.config']['app_secret'],
@@ -19,14 +19,14 @@ class FacebookServiceProvider implements ServiceProviderInterface {
             ));
         });
         
-        $app['facebook.config'] = $app->share(function() use ($app) {
+        $app['facebook.config'] = $app->share(function () use ($app) {
             return array(
                 'app_id' => (string) $app['config']['social']['facebook']['app_id'],
                 'app_secret' => (string) $app['config']['social']['facebook']['app_secret'],
             );
         });
         
-        $app['facebook.login_url'] = $app->share(function() use ($app) {
+        $app['facebook.login_url'] = $app->share(function () use ($app) {
             return $app['facebook']->getRedirectLoginHelper()->getLoginUrl(
                 $app['url_generator']->generate('socialauth', array(
                     'name' => 'facebook'
@@ -35,7 +35,7 @@ class FacebookServiceProvider implements ServiceProviderInterface {
             );
         });
 
-        $app['facebook.access_token'] = $app->share(function() use ($app) {
+        $app['facebook.access_token'] = $app->share(function () use ($app) {
             $accessToken = $app['facebook']->getRedirectLoginHelper()->getAccessToken();
             $oAuth2Client = $app['facebook']->getOAuth2Client();
             
@@ -50,7 +50,7 @@ class FacebookServiceProvider implements ServiceProviderInterface {
             return $accessToken;
         });
 
-        $app['facebook.user'] = $app->share(function() use ($app) {
+        $app['facebook.user'] = $app->share(function () use ($app) {
             $app['facebook']->setDefaultAccessToken($app['facebook.access_token']);
             $response = $app['facebook']->get('/me?fields=name,email');
             

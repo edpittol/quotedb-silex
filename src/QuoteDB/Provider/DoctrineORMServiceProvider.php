@@ -10,8 +10,8 @@ class DoctrineORMServiceProvider implements ServiceProviderInterface {
 
     public function register(Application $app)
     {
-        $app['orm.em'] = $app->share(function($app) {
-           return EntityManagerFactory::create($app['config']['db']); 
+        $app['orm.em'] = $app->share(function ($app) {
+            return EntityManagerFactory::create($app['config']['db']);
         });
     }
 

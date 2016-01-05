@@ -14,7 +14,7 @@ use QuoteDB\Entity\Contact;
 
 $filename = __DIR__ .preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
 if (php_sapi_name() === 'cli-server' && is_file($filename)) {
-	return false;
+    return false;
 }
 
 require_once __DIR__.'/../vendor/autoload.php';
@@ -46,14 +46,14 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             'users' => $app->share(function ($app) {
                 return $app['orm.em']->getRepository('QuoteDB:User');
-    		}),
-    	),
+            }),
+        ),
     )
 ));
 $app->register(new QuoteDB\Provider\SecurityServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-	'twig.path' => array(__DIR__ .'/../views')
+    'twig.path' => array(__DIR__ .'/../views')
 ));
 $app->register(new Knp\Menu\Integration\Silex\KnpMenuServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -83,32 +83,32 @@ $app['security.authentication.success_handler.default'] = $app->share(function (
 
 // Twig extend
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
-	// Add global variables
-	$twig->addGlobal('last_username', $app['session']->get('_security.last_username'));
+    // Add global variables
+    $twig->addGlobal('last_username', $app['session']->get('_security.last_username'));
 
-	return $twig;
+    return $twig;
 }));
 
 // Create menu
 $app['main_menu'] = function ($app) {
-	$menu = $app['knp_menu.factory']->createItem('root', array('childAttributes' => array('class', 'teste')));
-	$menu->setChildrenAttribute('class', 'nav navbar-nav');
+    $menu = $app['knp_menu.factory']->createItem('root', array('childAttributes' => array('class', 'teste')));
+    $menu->setChildrenAttribute('class', 'nav navbar-nav');
 
-	$menu->addChild($app['translator']->trans('Home'), array('route'    => 'homepage'));
-	$menu->addChild($app['translator']->trans('Contact'), array('route' => 'contact'));
+    $menu->addChild($app['translator']->trans('Home'), array('route'    => 'homepage'));
+    $menu->addChild($app['translator']->trans('Contact'), array('route' => 'contact'));
 
-	return $menu;
+    return $menu;
 };
 $app['knp_menu.menus'] = array('main' => 'main_menu');
 
 $app['security.role_hierarchy'] = array(
-	'ROLE_ADMIN' => array('ROLE_USER'),
+    'ROLE_ADMIN' => array('ROLE_USER'),
 );
 
 $app['twig.form.templates'] = array('bootstrap_3_layout.html.twig');
 
 // translate config files
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+$app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
     $translator->addLoader('yaml', new YamlFileLoader());
     $translator->addResource('yaml', __DIR__ . '/../locales/pt_BR.yml', 'pt_BR');
     $translator->addResource('yaml', __DIR__ . '/../locales/pt_BR.yml', 'pt_BR', 'validators');
@@ -116,17 +116,17 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
     return $translator;
 }));
 
-$app->before(function (Request $request) use ($app) {    
-	$app['knp_menu.matcher']->addVoter(new UriVoter($request->getRequestUri()));
+$app->before(function (Request $request) use ($app) {
+    $app['knp_menu.matcher']->addVoter(new UriVoter($request->getRequestUri()));
 
-	$securityLastError = $app['security.last_error']($request);
-	if (!empty($securityLastError)) {
-		$app['session']->getFlashBag()->add('error', $securityLastError);
-	}
+    $securityLastError = $app['security.last_error']($request);
+    if (!empty($securityLastError)) {
+        $app['session']->getFlashBag()->add('error', $securityLastError);
+    }
 });
 
 // Homepage controller
-$app->get('/', function () use ($app) {    
+$app->get('/', function () use ($app) {
     $quote = new Quote();
     $form = $app['form.factory']->create(QuoteType::class, $quote, array(
         'action' => $app['url_generator']->generate('quote')
@@ -134,10 +134,10 @@ $app->get('/', function () use ($app) {
     
     $quotes = $app['orm.em']->getRepository('QuoteDB:Quote')->homepageQuotes();
     
-	return $app['twig']->render('index.twig', array(
+    return $app['twig']->render('index.twig', array(
         'form' => $form->createView(),
-	    'quotes' => $quotes
-	));
+        'quotes' => $quotes
+    ));
 })
 ->bind('homepage');
 
@@ -150,7 +150,12 @@ $app->match('/contact', function (Request $request) use ($app) {
         $contact = $form->getData();
         
         $subject = $app['translator']->trans('New Quote DB contact message');
-        $body = sprintf("Name: %s\nE-mail: %s\nMessage:\n%s", $contact->getName(), $contact->getEmail(), $contact->getMessage());
+        $body = sprintf(
+            "Name: %s\nE-mail: %s\nMessage:\n%s",
+            $contact->getName(),
+            $contact->getEmail(),
+            $contact->getMessage()
+        );
         
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
@@ -159,14 +164,14 @@ $app->match('/contact', function (Request $request) use ($app) {
             ->setTo(array('aztec@aztecweb.net'))
             ->setBody($body);
         
-//         if ($app['mailer']->send($message)) {
-//             $app['session']->getFlashBag()->add('success', $app['translator']->trans('Message send successfully'));
-//             $app['monolog']->addInfo('Contact sent.');
-//             $form = $app['form.factory']->create(ContactType::class);
-//         } else {
-//             $app['session']->getFlashBag()->add('error', $app['translator']->trans('Error to send message'));
-//             $app['monolog']->addCritical('Error to send contact message.');
-//         }
+        if ($app['mailer']->send($message)) {
+            $app['session']->getFlashBag()->add('success', $app['translator']->trans('Message send successfully'));
+            $app['monolog']->addInfo('Contact sent.');
+            $form = $app['form.factory']->create(ContactType::class);
+        } else {
+            $app['session']->getFlashBag()->add('error', $app['translator']->trans('Error to send message'));
+            $app['monolog']->addCritical('Error to send contact message.');
+        }
         
         $app->redirect('contact');
     } else {
@@ -175,9 +180,9 @@ $app->match('/contact', function (Request $request) use ($app) {
         }
     }
     
-	return $app['twig']->render('contact.twig', array(
+    return $app['twig']->render('contact.twig', array(
         'form' => $form->createView()
-	));
+    ));
 })
 ->method('GET|POST')
 ->bind('contact');
@@ -189,7 +194,10 @@ $app->match('/register', function (Request $request) use ($app) {
     
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-        $password = $app['security.encoder_factory']->getEncoder($user)->encodePassword($user->getPlainPassword(), $user->getSalt());
+        $password = $app['security.encoder_factory']
+            ->getEncoder($user)
+            ->encodePassword($user->getPlainPassword(), $user->getSalt())
+        ;
         $user->setPassword($password);
     
         // persist user on database
@@ -198,8 +206,9 @@ $app->match('/register', function (Request $request) use ($app) {
         $em->flush();
         
         $app['session']->getFlashBag()->add('success', $app['translator']->trans('Register successful.'));
-        $app['monolog']->addInfo(sprintf("User '%s' registered with ID %d and form provider.", $user->getEmail(), $user->getId()));
-
+        $app['monolog']->addInfo(
+            sprintf("User '%s' registered with ID %d and form provider.", $user->getEmail(), $user->getId())
+        );
         $app['user'] = $user;
         $app['security.token_storage']->setToken($app['security.set_token']);
     
@@ -229,7 +238,9 @@ $app->get('/socialauth/{name}', function (Request $request, $name) use ($app) {
             $em->flush();
         
             $app['session']->getFlashBag()->add('success', $app['translator']->trans('Register successful.'));
-            $app['monolog']->addInfo(sprintf("User '%s' registered with ID %d and %s provider.", $user->getEmail(), $user->getId(), $name));
+            $app['monolog']->addInfo(
+                sprintf("User '%s' registered with ID %d and %s provider.", $user->getEmail(), $user->getId(), $name)
+            );
         }
         
         $app['user'] = $user;
@@ -248,12 +259,12 @@ $app->get('/authors', function (Request $request) use ($app) {
     $query = $request->query->get('query');
     $authors = $app['orm.em']->getRepository('QuoteDB:Author')->autocompleteQuery($query);
     
-	return $app->json($authors, 201);
+    return $app->json($authors, 201);
 })
 ->bind('authors');
 
 // insert quote controller
-$app->post('/quote', function (Request $request) use ($app) {    
+$app->post('/quote', function (Request $request) use ($app) {
     $quote = new Quote();
     $form = $app['form.factory']->create(QuoteType::class, $quote);
     
@@ -282,7 +293,10 @@ $app->post('/quote', function (Request $request) use ($app) {
         $em->persist($quote);
         $em->flush();
         
-        $app['session']->getFlashBag()->add('success', $app['translator']->trans('Quote registered with success. Wait for approve.'));
+        $app['session']->getFlashBag()->add(
+            'success',
+            $app['translator']->trans('Quote registered with success. Wait for approve.')
+        );
         $app['monolog']->addInfo(sprintf("Quote '%d' registered.", $quote->getId()));
     } else {
         $app['session']->getFlashBag()->add('error', $app['translator']->trans('Error on register quote. Try again.'));
