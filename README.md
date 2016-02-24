@@ -41,4 +41,4 @@ The app will served in http://localhost:8080.
 
 ## Issues
 
-Use the [GitHub project issues](https://github.com/edpittol/quotedb-silex/issues) to send bug, dubts, whatever.
+Use the [GitHub project issues](https://github.com/edpittol/quotedb-silex/issues) to send bug, questions, whatever.
